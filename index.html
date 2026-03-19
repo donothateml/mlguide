@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MLGuide | Learn ML Simply</title>
-<meta name="description" content="Learn machine learning with visuals, math, and quizzes">
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -39,6 +38,7 @@ button{padding:8px 15px;background:var(--primary);color:white;border:none;border
 <div class="logo">MLGuide</div>
 <div>
 <a href="#start">Start</a>
+<a href="#quiz">Quiz</a>
 <a href="#sandbox">Sandbox</a>
 <a href="#math">Math</a>
 </div>
@@ -46,7 +46,7 @@ button{padding:8px 15px;background:var(--primary);color:white;border:none;border
 
 <header>
 <h1>🎯 Become ML Engineer in 30 Days</h1>
-<p>Learn Machine Learning with visuals, math, and daily quizzes 🚀</p>
+<p>Learn ML with visuals, math, and daily quizzes 🚀</p>
 </header>
 
 <!-- START -->
@@ -59,11 +59,22 @@ button{padding:8px 15px;background:var(--primary);color:white;border:none;border
 </div>
 </div>
 
-<!-- QUIZ -->
-<div class="container">
-<h2>🔥 Daily Quiz</h2>
-
+<!-- DIFFICULTY -->
+<div class="container" id="quiz">
 <div class="card">
+<h3>🎯 Select Difficulty</h3>
+
+<button onclick="setDifficulty('easy')">Easy</button>
+<button onclick="setDifficulty('medium')">Medium</button>
+<button onclick="setDifficulty('hard')">Hard</button>
+
+<p>Current: <span id="diff"></span></p>
+</div>
+
+<!-- QUIZ -->
+<div class="card">
+<h3>🔥 Daily Quiz</h3>
+
 <p id="q"></p>
 
 <button id="btn1" onclick="ans(0)"></button>
@@ -89,7 +100,6 @@ button{padding:8px 15px;background:var(--primary);color:white;border:none;border
 <input type="range" min="1" max="5" value="2" id="slider" onchange="draw()">
 <canvas id="chart"></canvas>
 </div>
-
 </div>
 
 <!-- MATH -->
@@ -97,44 +107,65 @@ button{padding:8px 15px;background:var(--primary);color:white;border:none;border
 <h2>Math Foundation</h2>
 
 <div class="bento">
-
 <div class="card">
 <h3>Linear Algebra</h3>
 <div class="math">Ax = λx</div>
-<p>Used in PCA & eigenvalues.</p>
 </div>
 
 <div class="card">
 <h3>Optimization</h3>
 <div class="math">θ = θ - η∇J(θ)</div>
-<p>Gradient descent minimizes loss.</p>
 </div>
 
 <div class="card">
 <h3>Probability</h3>
 <div class="math">P(A|B) = P(B|A)P(A)/P(B)</div>
-<p>Used in Naive Bayes.</p>
 </div>
-
 </div>
 </div>
 
 <script>
-// QUESTIONS
-let q = [
-{q:"KNN is?", options:["Lazy learner","Neural network"], a:0},
-{q:"Regression predicts?", options:["Numbers","Categories"], a:0},
-{q:"Sigmoid range?", options:["0 to 1","-∞ to ∞"], a:0}
-];
 
-let today = new Date().getDate() % q.length;
+// 🎯 Difficulty
+let difficulty = localStorage.getItem("difficulty") || "easy";
+document.getElementById("diff").innerText = difficulty;
 
-// SET QUESTION
-document.getElementById("q").innerText = q[today].q;
-document.getElementById("btn1").innerText = q[today].options[0];
-document.getElementById("btn2").innerText = q[today].options[1];
+// 📅 Daily seed
+let seed = Math.floor(Date.now() / 86400000);
 
-// LOAD DATA
+// 🎲 Random generator
+function seededRandom(seed){
+return Math.abs(Math.sin(seed)*10000)%1;
+}
+
+// 🎯 Generate Question
+function generateQuestion(){
+let r = seededRandom(seed);
+
+if(difficulty==="easy"){
+return {q:"KNN is?",options:["Lazy learner","Neural network"],a:0};
+}
+
+if(difficulty==="medium"){
+let x = Math.floor(r*5)+1;
+return {q:`If y = 2x + 1, what is y when x=${x}?`,options:[2*x+1,2*x],a:0};
+}
+
+if(difficulty==="hard"){
+let a = Math.floor(r*5)+1;
+let b = Math.floor(r*3)+1;
+return {q:`θ = ${a} - 0.1*${b} = ?`,options:[a-0.1*b,a+0.1*b],a:0};
+}
+}
+
+let currentQ = generateQuestion();
+
+// Show question
+document.getElementById("q").innerText = currentQ.q;
+document.getElementById("btn1").innerText = currentQ.options[0];
+document.getElementById("btn2").innerText = currentQ.options[1];
+
+// Stats
 let score = localStorage.getItem("score") || 0;
 let streak = localStorage.getItem("streak") || 0;
 
@@ -142,39 +173,40 @@ document.getElementById("score").innerText = score;
 document.getElementById("streak").innerText = streak;
 document.getElementById("level").innerText = Math.floor(score/5)+1;
 
-// ANSWER FUNCTION
+// Answer
 function ans(choice){
-if(choice === q[today].a){
-document.getElementById("res").innerText = "Correct 🔥";
-score++; streak++;
+if(choice===currentQ.a){
+document.getElementById("res").innerText="Correct 🔥";
+score++;streak++;
 }else{
-document.getElementById("res").innerText = "Wrong ❌";
-streak = 0;
+document.getElementById("res").innerText="Wrong ❌";
+streak=0;
 }
 
-localStorage.setItem("score", score);
-localStorage.setItem("streak", streak);
+localStorage.setItem("score",score);
+localStorage.setItem("streak",streak);
 
-// Delay reload for better UX
 setTimeout(()=>location.reload(),1500);
 }
 
-// GRAPH
+// Difficulty change
+function setDifficulty(level){
+localStorage.setItem("difficulty",level);
+location.reload();
+}
+
+// Graph
 let chart;
 function draw(){
 if(chart) chart.destroy();
-
-let slope = document.getElementById("slider").value;
-
-chart = new Chart(document.getElementById("chart"), {
+let slope=document.getElementById("slider").value;
+chart=new Chart(document.getElementById("chart"),{
 type:'line',
-data:{
-labels:[1,2,3],
-datasets:[{data:[1*slope,2*slope,3*slope]}]
-}
+data:{labels:[1,2,3],datasets:[{data:[1*slope,2*slope,3*slope]}]}
 });
 }
 draw();
+
 </script>
 
 </body>
