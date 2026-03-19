@@ -1,52 +1,48 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Logistic Regression - MLGuide</title>
+<title>Logistic Regression</title>
 <style>
-body{font-family:Arial;padding:40px;max-width:900px;margin:auto}
-.card{border:1px solid #ddd;padding:20px;border-radius:10px;margin:20px 0}
-button{padding:10px;background:#4f46e5;color:white;border:none;border-radius:5px}
+body{margin:0;font-family:Arial;display:flex}
+.sidebar{width:250px;height:100vh;overflow:auto;border-right:1px solid #ddd;padding:20px;position:fixed}
+.main{margin-left:260px;padding:40px;max-width:900px}
+h1{color:#4f46e5}
 </style>
 </head>
 
 <body>
 
-<a href="index.html">⬅ Back</a>
+<div class="sidebar">
+<h2>MLGuide</h2>
+<input onkeyup="searchTopics(this)" placeholder="Search...">
+<div id="links">
+<a href="knn.html">KNN</a>
+<a href="logistic.html">Logistic</a>
+<a href="regression.html">Regression</a>
+<a href="naivebayes.html">Naive Bayes</a>
+<a href="svm.html">SVM</a>
+<a href="decisiontree.html">Decision Tree</a>
+<a href="randomforest.html">Random Forest</a>
+<a href="kmeans.html">K-Means</a>
+<a href="pca.html">PCA</a>
+<a href="gradientdescent.html">Gradient Descent</a>
+<a href="metrics.html">Metrics</a>
+<a href="overfitting.html">Overfitting</a>
+<a href="crossvalidation.html">Cross Validation</a>
+</div>
+</div>
 
+<div class="main">
 <h1>Logistic Regression</h1>
-
-<div class="card">
-<h2>📌 Intuition</h2>
-<p>Used for classification problems (Yes/No).</p>
-</div>
-
-<div class="card">
-<h2>📊 Sigmoid Function</h2>
-<p>σ(x) = 1 / (1 + e^-x)</p>
-</div>
-
-<div class="card">
-<h2>🔢 Example</h2>
-<p>Output = 0.8 → Class = 1</p>
-</div>
-
-<div class="card">
-<h2>🎯 Interview</h2>
-<p><b>Q:</b> Why not linear regression?</p>
-<p><b>A:</b> Output not bounded</p>
-</div>
-
-<div class="card">
-<h2>🧪 Quiz</h2>
-<p>Sigmoid range?</p>
-<button onclick="check(1)">0 to 1</button>
-<button onclick="check(0)">-∞ to ∞</button>
-<p id="res"></p>
+<p>Used for classification using sigmoid function.</p>
 </div>
 
 <script>
-function check(x){
-document.getElementById("res").innerText = x ? "Correct" : "Wrong";
+function searchTopics(el){
+let v=el.value.toLowerCase();
+document.querySelectorAll("#links a").forEach(a=>{
+a.style.display=a.innerText.toLowerCase().includes(v)?"block":"none";
+});
 }
 </script>
 
