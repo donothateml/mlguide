@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MLGuide</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+body{background:#0f172a;color:#e2e8f0}
+header{padding:20px;text-align:center;background:linear-gradient(90deg,#1e3a8a,#2563eb)}
+nav{display:flex;justify-content:center;gap:20px;background:#020617;padding:10px}
+nav a{color:#cbd5f5;text-decoration:none;padding:8px 16px;border-radius:6px}
+nav a:hover{background:#2563eb;color:white}
+.container{padding:40px;max-width:1100px;margin:auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
+.card{background:#1e293b;padding:20px;border-radius:12px;transition:0.3s}
+.card:hover{transform:translateY(-5px)}
+button{margin-top:10px;padding:10px;border:none;border-radius:6px;background:#2563eb;color:white;cursor:pointer}
+button:hover{background:#1d4ed8}
+footer{text-align:center;padding:20px;background:#020617;margin-top:40px}
+.quiz button{display:block;width:100%;margin:8px 0}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>MLGuide</h1>
+<p>Your Simple Guide to Machine Learning 🚀</p>
+</header>
+
+<nav>
+<a href="#">Home</a>
+<a href="#tutorials">Tutorials</a>
+<a href="#quiz">Quiz</a>
+</nav>
+
+<div class="container" id="tutorials">
+<h2>📚 Tutorials</h2>
+<div class="grid">
+
+<div class="card">
+<h3>KNN Visual</h3>
+<button onclick="showChart()">View Graph</button>
+</div>
+
+<div class="card">
+<h3>Regression Graph</h3>
+<button onclick="showRegressionChart()">View Graph</button>
+</div>
+
+</div>
+
+<canvas id="chart" style="margin-top:30px"></canvas>
+</div>
+
+<div class="container quiz" id="quiz">
+<h2>🧪 Quiz</h2>
+<div class="card">
+<p id="question"></p>
+<div id="options"></div>
+<p id="score"></p>
+</div>
+</div>
+
+<footer>
+<p>© 2026 MLGuide | Built with ❤️</p>
+</footer>
+
+<script>
+// -------- GRAPH SECTION --------
+function showChart(){
+new Chart(document.getElementById('chart'),{
+type:'scatter',
+data:{datasets:[{label:'KNN Points',data:[{x:1,y:2},{x:2,y:3},{x:3,y:1}]}]}
+});
+}
+
+function showRegressionChart(){
+new Chart(document.getElementById('chart'),{
+type:'line',
+data:{labels:[1,2,3,4],datasets:[{label:'y=2x',data:[2,4,6,8]}]}
+});
+}
+
+// -------- QUIZ SYSTEM --------
+const quizData=[
+{q:"What is K in KNN?",options:["Neighbors","Features"],ans:0},
+{q:"Logistic regression output?",options:["Number","Probability"],ans:1},
+{q:"Linear regression predicts?",options:["Category","Number"],ans:1}
+];
+
+let index=0,score=0;
+
+function loadQ(){
+let q=quizData[index];
+document.getElementById('question').innerText=q.q;
+let ops="";
+q.options.forEach((o,i)=>{
+ops+=`<button onclick="check(${i})">${o}</button>`;
+});
+document.getElementById('options').innerHTML=ops;
+}
+
+function check(i){
+if(i===quizData[index].ans) score++;
+index++;
+if(index<quizData.length){loadQ();}
+else{
+document.getElementById('question').innerText="Quiz Finished";
+document.getElementById('options').innerHTML="";
+document.getElementById('score').innerText="Score: "+score;
+}
+}
+
+loadQ();
+
+// -------- PAYMENT (SIMULATION) --------
+function buyPDF(){
+alert("Payment integration coming soon!");
+}
+</script>
+
+</body>
+</html>
