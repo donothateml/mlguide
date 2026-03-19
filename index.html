@@ -1,128 +1,86 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MLGuide</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
-body{background:#0f172a;color:#e2e8f0}
-header{padding:20px;text-align:center;background:linear-gradient(90deg,#1e3a8a,#2563eb)}
-nav{display:flex;justify-content:center;gap:20px;background:#020617;padding:10px}
-nav a{color:#cbd5f5;text-decoration:none;padding:8px 16px;border-radius:6px}
-nav a:hover{background:#2563eb;color:white}
-.container{padding:40px;max-width:1100px;margin:auto}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
-.card{background:#1e293b;padding:20px;border-radius:12px;transition:0.3s}
-.card:hover{transform:translateY(-5px)}
-button{margin-top:10px;padding:10px;border:none;border-radius:6px;background:#2563eb;color:white;cursor:pointer}
-button:hover{background:#1d4ed8}
-footer{text-align:center;padding:20px;background:#020617;margin-top:40px}
-.quiz button{display:block;width:100%;margin:8px 0}
+body{font-family:Arial;margin:0;background:#f8fafc}
+nav{padding:15px;background:#4f46e5;color:white}
+.container{padding:30px}
+.card{background:white;padding:20px;margin:15px 0;border-radius:10px}
+button{padding:10px;margin:5px;background:#4f46e5;color:white;border:none;border-radius:5px}
 </style>
 </head>
 
 <body>
 
-<header>
-<h1>MLGuide</h1>
-<p>Your Simple Guide to Machine Learning 🚀</p>
-</header>
+<nav>MLGuide</nav>
 
-<nav>
-<a href="#">Home</a>
-<a href="#tutorials">Tutorials</a>
-<a href="#quiz">Quiz</a>
-</nav>
+<div class="container">
 
-<div class="container" id="tutorials">
-<h2>📚 Tutorials</h2>
-<div class="grid">
+<h2>Start Learning</h2>
+<a href="knn.html">KNN</a> |
+<a href="logistic.html">Logistic</a> |
+<a href="regression.html">Regression</a>
 
 <div class="card">
-<h3>KNN Visual</h3>
-<button onclick="showChart()">View Graph</button>
+<h3>🔥 Daily Quiz</h3>
+<p id="q"></p>
+<button onclick="ans(1)">Option A</button>
+<button onclick="ans(0)">Option B</button>
+<p id="res"></p>
 </div>
 
 <div class="card">
-<h3>Regression Graph</h3>
-<button onclick="showRegressionChart()">View Graph</button>
+<h3>🏆 Your Stats</h3>
+<p>Score: <span id="score"></span></p>
+<p>Streak: <span id="streak"></span></p>
+<p>Level: <span id="level"></span></p>
 </div>
 
-</div>
+<canvas id="chart"></canvas>
 
-<canvas id="chart" style="margin-top:30px"></canvas>
 </div>
-
-<div class="container quiz" id="quiz">
-<h2>🧪 Quiz</h2>
-<div class="card">
-<p id="question"></p>
-<div id="options"></div>
-<p id="score"></p>
-</div>
-</div>
-
-<footer>
-<p>© 2026 MLGuide | Built with ❤️</p>
-</footer>
 
 <script>
-// -------- GRAPH SECTION --------
-function showChart(){
-new Chart(document.getElementById('chart'),{
-type:'scatter',
-data:{datasets:[{label:'KNN Points',data:[{x:1,y:2},{x:2,y:3},{x:3,y:1}]}]}
-});
-}
-
-function showRegressionChart(){
-new Chart(document.getElementById('chart'),{
-type:'line',
-data:{labels:[1,2,3,4],datasets:[{label:'y=2x',data:[2,4,6,8]}]}
-});
-}
-
-// -------- QUIZ SYSTEM --------
-const quizData=[
-{q:"What is K in KNN?",options:["Neighbors","Features"],ans:0},
-{q:"Logistic regression output?",options:["Number","Probability"],ans:1},
-{q:"Linear regression predicts?",options:["Category","Number"],ans:1}
+let questions=[
+{q:"KNN is?",a:1},
+{q:"Regression predicts?",a:1},
+{q:"Sigmoid range?",a:1}
 ];
 
-let index=0,score=0;
+let today=new Date().getDate()%questions.length;
+document.getElementById("q").innerText=questions[today].q;
 
-function loadQ(){
-let q=quizData[index];
-document.getElementById('question').innerText=q.q;
-let ops="";
-q.options.forEach((o,i)=>{
-ops+=`<button onclick="check(${i})">${o}</button>`;
+let score=localStorage.getItem("score")||0;
+let streak=localStorage.getItem("streak")||0;
+
+document.getElementById("score").innerText=score;
+document.getElementById("streak").innerText=streak;
+document.getElementById("level").innerText=Math.floor(score/5)+1;
+
+function ans(x){
+if(x==questions[today].a){
+score++;
+streak++;
+localStorage.setItem("score",score);
+localStorage.setItem("streak",streak);
+document.getElementById("res").innerText="Correct 🔥";
+}else{
+streak=0;
+localStorage.setItem("streak",streak);
+document.getElementById("res").innerText="Wrong ❌";
+}
+location.reload();
+}
+
+// Graph
+new Chart(document.getElementById('chart'),{
+type:'line',
+data:{labels:[1,2,3],datasets:[{data:[2,4,6]}]}
 });
-document.getElementById('options').innerHTML=ops;
-}
-
-function check(i){
-if(i===quizData[index].ans) score++;
-index++;
-if(index<quizData.length){loadQ();}
-else{
-document.getElementById('question').innerText="Quiz Finished";
-document.getElementById('options').innerHTML="";
-document.getElementById('score').innerText="Score: "+score;
-}
-}
-
-loadQ();
-
-// -------- PAYMENT (SIMULATION) --------
-function buyPDF(){
-alert("Payment integration coming soon!");
-}
 </script>
 
 </body>
