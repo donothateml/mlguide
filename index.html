@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MLGuide | Learn ML Simply</title>
-<meta name="description" content="Learn ML with visuals, math, and quizzes">
+<meta name="description" content="Learn machine learning with visuals, math, and quizzes">
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -21,6 +21,7 @@ nav{display:flex;justify-content:space-between;padding:20px 8%;border-bottom:1px
 nav a{margin-left:20px;text-decoration:none;color:var(--soft)}
 
 header{padding:60px 8%;background:var(--surface)}
+
 .container{padding:50px 8%}
 
 .bento{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
@@ -28,7 +29,7 @@ header{padding:60px 8%;background:var(--surface)}
 
 .math{background:#eef2ff;padding:10px;border-left:4px solid var(--primary);margin-top:10px}
 
-button{padding:8px 15px;background:var(--primary);color:white;border:none;border-radius:6px;margin-top:10px}
+button{padding:8px 15px;background:var(--primary);color:white;border:none;border-radius:6px;margin-top:10px;cursor:pointer}
 </style>
 </head>
 
@@ -44,8 +45,8 @@ button{padding:8px 15px;background:var(--primary);color:white;border:none;border
 </nav>
 
 <header>
-<h1>MLGuide</h1>
-<p>Your simple guide to Machine Learning 🚀</p>
+<h1>🎯 Become ML Engineer in 30 Days</h1>
+<p>Learn Machine Learning with visuals, math, and daily quizzes 🚀</p>
 </header>
 
 <!-- START -->
@@ -61,14 +62,18 @@ button{padding:8px 15px;background:var(--primary);color:white;border:none;border
 <!-- QUIZ -->
 <div class="container">
 <h2>🔥 Daily Quiz</h2>
+
 <div class="card">
 <p id="q"></p>
-<button onclick="ans(1)">Option A</button>
-<button onclick="ans(0)">Option B</button>
+
+<button id="btn1" onclick="ans(0)"></button>
+<button id="btn2" onclick="ans(1)"></button>
+
 <p id="res"></p>
 </div>
 
 <div class="card">
+<h3>🏆 Your Stats</h3>
 <p>Score: <span id="score"></span></p>
 <p>Streak: <span id="streak"></span></p>
 <p>Level: <span id="level"></span></p>
@@ -78,13 +83,16 @@ button{padding:8px 15px;background:var(--primary);color:white;border:none;border
 <!-- SANDBOX -->
 <div class="container" id="sandbox">
 <h2>Interactive Graph</h2>
+
 <div class="card">
+<p>👉 Change slope to see model behavior</p>
 <input type="range" min="1" max="5" value="2" id="slider" onchange="draw()">
 <canvas id="chart"></canvas>
 </div>
+
 </div>
 
-<!-- MATH SECTION -->
+<!-- MATH -->
 <div class="container" id="math">
 <h2>Math Foundation</h2>
 
@@ -93,13 +101,13 @@ button{padding:8px 15px;background:var(--primary);color:white;border:none;border
 <div class="card">
 <h3>Linear Algebra</h3>
 <div class="math">Ax = λx</div>
-<p>Used in PCA and eigenvalues.</p>
+<p>Used in PCA & eigenvalues.</p>
 </div>
 
 <div class="card">
 <h3>Optimization</h3>
 <div class="math">θ = θ - η∇J(θ)</div>
-<p>Gradient descent updates weights.</p>
+<p>Gradient descent minimizes loss.</p>
 </div>
 
 <div class="card">
@@ -112,40 +120,58 @@ button{padding:8px 15px;background:var(--primary);color:white;border:none;border
 </div>
 
 <script>
-// QUIZ
-let q=[{q:"KNN is?",a:1},{q:"Regression predicts?",a:1}];
-let today=new Date().getDate()%q.length;
-document.getElementById("q").innerText=q[today].q;
+// QUESTIONS
+let q = [
+{q:"KNN is?", options:["Lazy learner","Neural network"], a:0},
+{q:"Regression predicts?", options:["Numbers","Categories"], a:0},
+{q:"Sigmoid range?", options:["0 to 1","-∞ to ∞"], a:0}
+];
 
-let score=localStorage.getItem("score")||0;
-let streak=localStorage.getItem("streak")||0;
+let today = new Date().getDate() % q.length;
 
-document.getElementById("score").innerText=score;
-document.getElementById("streak").innerText=streak;
-document.getElementById("level").innerText=Math.floor(score/5)+1;
+// SET QUESTION
+document.getElementById("q").innerText = q[today].q;
+document.getElementById("btn1").innerText = q[today].options[0];
+document.getElementById("btn2").innerText = q[today].options[1];
 
-function ans(x){
-if(x==q[today].a){
-score++;streak++;
-localStorage.setItem("score",score);
-localStorage.setItem("streak",streak);
-document.getElementById("res").innerText="Correct";
+// LOAD DATA
+let score = localStorage.getItem("score") || 0;
+let streak = localStorage.getItem("streak") || 0;
+
+document.getElementById("score").innerText = score;
+document.getElementById("streak").innerText = streak;
+document.getElementById("level").innerText = Math.floor(score/5)+1;
+
+// ANSWER FUNCTION
+function ans(choice){
+if(choice === q[today].a){
+document.getElementById("res").innerText = "Correct 🔥";
+score++; streak++;
 }else{
-streak=0;
-localStorage.setItem("streak",streak);
-document.getElementById("res").innerText="Wrong";
+document.getElementById("res").innerText = "Wrong ❌";
+streak = 0;
 }
-setTimeout(()=>location.reload(),500);
+
+localStorage.setItem("score", score);
+localStorage.setItem("streak", streak);
+
+// Delay reload for better UX
+setTimeout(()=>location.reload(),1500);
 }
 
 // GRAPH
 let chart;
 function draw(){
 if(chart) chart.destroy();
-let slope=document.getElementById("slider").value;
-chart=new Chart(document.getElementById("chart"),{
+
+let slope = document.getElementById("slider").value;
+
+chart = new Chart(document.getElementById("chart"), {
 type:'line',
-data:{labels:[1,2,3],datasets:[{data:[1*slope,2*slope,3*slope]}]}
+data:{
+labels:[1,2,3],
+datasets:[{data:[1*slope,2*slope,3*slope]}]
+}
 });
 }
 draw();

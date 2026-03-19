@@ -1,11 +1,54 @@
 <!DOCTYPE html>
 <html>
-<body style="font-family:Arial;padding:40px">
+<head>
+<title>Linear Regression - MLGuide</title>
+<style>
+body{font-family:Arial;padding:40px;max-width:900px;margin:auto}
+.card{border:1px solid #ddd;padding:20px;border-radius:10px;margin:20px 0}
+button{padding:10px;background:#4f46e5;color:white;border:none;border-radius:5px}
+</style>
+</head>
 
-<h1>Linear Regression</h1>
-<p>y = mx + b</p>
+<body>
 
 <a href="index.html">⬅ Back</a>
+
+<h1>Linear Regression</h1>
+
+<div class="card">
+<h2>📌 Intuition</h2>
+<p>Finds best line fitting data.</p>
+</div>
+
+<div class="card">
+<h2>📐 Equation</h2>
+<p>y = mx + b</p>
+</div>
+
+<div class="card">
+<h2>🔢 Example</h2>
+<p>x=2 → y=5</p>
+</div>
+
+<div class="card">
+<h2>🎯 Interview</h2>
+<p><b>Q:</b> What is overfitting?</p>
+<p><b>A:</b> Model learns noise</p>
+</div>
+
+<div class="card">
+<h2>🧪 Quiz</h2>
+<p>Regression predicts?</p>
+<button onclick="check(1)">Numbers</button>
+<button onclick="check(0)">Categories</button>
+<p id="res"></p>
+</div>
+
+<script>
+function check(x){
+document.getElementById("res").innerText = x ? "Correct" : "Wrong";
+}
+</script>
 
 </body>
 </html>

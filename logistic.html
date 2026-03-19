@@ -1,12 +1,54 @@
 <!DOCTYPE html>
 <html>
-<body style="font-family:Arial;padding:40px">
+<head>
+<title>Logistic Regression - MLGuide</title>
+<style>
+body{font-family:Arial;padding:40px;max-width:900px;margin:auto}
+.card{border:1px solid #ddd;padding:20px;border-radius:10px;margin:20px 0}
+button{padding:10px;background:#4f46e5;color:white;border:none;border-radius:5px}
+</style>
+</head>
 
-<h1>Logistic Regression</h1>
-<p>Used for classification.</p>
-<p>Formula: 1/(1+e^-x)</p>
+<body>
 
 <a href="index.html">⬅ Back</a>
+
+<h1>Logistic Regression</h1>
+
+<div class="card">
+<h2>📌 Intuition</h2>
+<p>Used for classification problems (Yes/No).</p>
+</div>
+
+<div class="card">
+<h2>📊 Sigmoid Function</h2>
+<p>σ(x) = 1 / (1 + e^-x)</p>
+</div>
+
+<div class="card">
+<h2>🔢 Example</h2>
+<p>Output = 0.8 → Class = 1</p>
+</div>
+
+<div class="card">
+<h2>🎯 Interview</h2>
+<p><b>Q:</b> Why not linear regression?</p>
+<p><b>A:</b> Output not bounded</p>
+</div>
+
+<div class="card">
+<h2>🧪 Quiz</h2>
+<p>Sigmoid range?</p>
+<button onclick="check(1)">0 to 1</button>
+<button onclick="check(0)">-∞ to ∞</button>
+<p id="res"></p>
+</div>
+
+<script>
+function check(x){
+document.getElementById("res").innerText = x ? "Correct" : "Wrong";
+}
+</script>
 
 </body>
 </html>

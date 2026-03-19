@@ -1,13 +1,58 @@
 <!DOCTYPE html>
 <html>
-<body style="font-family:Arial;padding:40px">
+<head>
+<title>KNN - MLGuide</title>
+<style>
+body{font-family:Arial;padding:40px;max-width:900px;margin:auto}
+.card{border:1px solid #ddd;padding:20px;border-radius:10px;margin:20px 0}
+button{padding:10px;background:#4f46e5;color:white;border:none;border-radius:5px}
+</style>
+</head>
 
-<h1>KNN</h1>
-<p>KNN finds nearest neighbors and predicts.</p>
-
-<p>Example: Red, Red, Blue → Red</p>
+<body>
 
 <a href="index.html">⬅ Back</a>
+
+<h1>K-Nearest Neighbors (KNN)</h1>
+
+<div class="card">
+<h2>📌 Intuition</h2>
+<p>KNN works by looking at nearest neighbors and taking majority vote.</p>
+</div>
+
+<div class="card">
+<h2>⚙️ Steps</h2>
+<ol>
+<li>Choose K</li>
+<li>Find nearest K points</li>
+<li>Majority vote</li>
+</ol>
+</div>
+
+<div class="card">
+<h2>🔢 Example</h2>
+<p>K=3 → Red, Red, Blue → Output = <b>Red</b></p>
+</div>
+
+<div class="card">
+<h2>🎯 Interview</h2>
+<p><b>Q:</b> What happens if K is too large?</p>
+<p><b>A:</b> Model becomes too smooth (underfitting)</p>
+</div>
+
+<div class="card">
+<h2>🧪 Quiz</h2>
+<p>KNN is:</p>
+<button onclick="check(1)">Lazy learner</button>
+<button onclick="check(0)">Deep learning</button>
+<p id="res"></p>
+</div>
+
+<script>
+function check(x){
+document.getElementById("res").innerText = x ? "Correct" : "Wrong";
+}
+</script>
 
 </body>
 </html>
